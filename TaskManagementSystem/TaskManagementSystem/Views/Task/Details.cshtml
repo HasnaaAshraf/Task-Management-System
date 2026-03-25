@@ -1,0 +1,41 @@
+﻿
+@model TaskManagement.Data.Models.TaskItem;
+
+@{
+    ViewData["Title"] = "Details Task";
+}
+
+<body>
+    <div class="card d-flex justify-content-center align-content-center bg-light mt-5">
+        <div class="auth-container shadow-sm p-4" style="width: 450px;">
+
+            <h2 class="text-center"> Details about this task</h2>
+
+            <form asp-action="Details" method="get">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label"></label>
+                    <input asp-for="Title" class="form-control" disabled/>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label"></label>
+                    <textarea asp-for="Description" class="form-control" disabled></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DueTo" class="form-label">Date</label>
+                    <input asp-for="DueTo" class="form-control" type="date" disabled/>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input asp-for="IsCompleted" class="form-check-input" type="checkbox" disabled/>
+                    <label asp-for="IsCompleted" class="form-check-label">Is Completed</label>
+                </div>
+
+                <a asp-action="Index" class="btn btn-secondary w-100 mt-2">Back To Tasks Home</a>
+            </form>
+
+        </div>
+    </div>
+</body>

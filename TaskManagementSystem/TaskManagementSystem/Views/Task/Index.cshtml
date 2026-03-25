@@ -1,0 +1,92 @@
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/home.css" />
+}
+
+@model TaskManagement.Presentation.Models.TasksHomeViewModel;
+
+@{
+    ViewData["Title"] = "To-Do List Home";
+}
+
+<div class=" table-container d-flex justify-content-center align-content-center mt-4">
+    <div class="tasks-container shadow p-4 " style="width: 1000px;">
+        <h2 class="text-center mb-4"><em> To-Do List</em></h2>
+
+        <div class="SearchContainer d-flex justify-content-between mb-3">
+            <div class="SearchContainer mb-3">
+                <form method="get" asp-action="Index" class="d-flex align-items-center gap-3">
+
+                    <input type="text" name="search"
+                           class="form-control" placeholder="Search Tasks..." style="max-width:300px;" />
+
+                    <div class="form-check d-flex align-items-center">
+                        <input type="checkbox" class="form-check-input me-2"
+                               name="showCompleted" value="true" id="completedFilter">
+
+                        <label class="form-check-label" for="completedFilter"> Completed </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary"> Search </button>
+
+                </form>
+            </div>
+            <div><a class="btn btn-primary" asp-controller="Task" asp-action="Create">Create New Task</a></div>
+        </div>
+
+
+
+        @if(Model?.Tasks != null && Model.Tasks.Any())
+        {
+        <div class="table-responsive">
+            <table class="table table-hover w-100 ">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>Completed </th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        @foreach (var task in Model.Tasks){
+                            <tr id="task-row-@task.Id"  data-task-id="@task.Id"
+                                data-due="@task.DueTo.ToString("yyyy-MM-ddTHH:mm:ss")"
+                                data-completed="@task.IsCompleted.ToString().ToLower()">
+                                <td>@task.Title</td>
+                                <td>
+                                    @task.DueTo.ToString("yyyy-MM-dd")
+                                    <div class="countdown text-muted small"></div>
+                                </td>
+                                <td >
+                                    <form asp-controller="Task" asp-action="ToggleStatus" asp-route-id="@task.Id" method="post">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="checkbox" class="task-toggle-checkbox" data-task-id="@task.Id"
+                                        @(task.IsCompleted ? "checked" : "") />
+
+                                    </form>
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@task.Id">Details</a>
+                                    <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@task.Id">Edit</a>
+                                    <form asp-controller="Task" asp-action="Delete" asp-route-id="@task.Id" method="post" class="d-inline"
+                                          onsubmit="return confirm('Are you sure you want to delete this task?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="button" class="btn btn-danger btn-sm delete-btn" data-task-id="@task.Id">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                </tbody>
+            </table>
+        </div>
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center">No Tasks Found.</td>
+            </tr>
+        }
+    </div>
+</div>

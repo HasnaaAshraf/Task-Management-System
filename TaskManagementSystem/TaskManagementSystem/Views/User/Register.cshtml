@@ -1,0 +1,43 @@
+﻿
+<link rel="stylesheet" href="~/css/auth-pages.css" />
+
+@model TaskManagement.Data.Models.User
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<body >
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="auth-container shadow-sm p-3" style="width: 450px;">
+          <h2>Register</h2>
+            <div class="form-check" style="width:350px;">
+                <form asp-action="Register" method="post">
+                    <div class="mb-3">
+                       <label asp-for="Name" class="form-label"></label>
+                       <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email"  class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" class="form-control" type="password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Register</button>
+
+                    <p class="text-center mt-3">
+                        Already have an account? <a asp-action="Login">Login</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>

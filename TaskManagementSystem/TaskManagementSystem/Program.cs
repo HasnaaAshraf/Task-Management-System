@@ -1,3 +1,10 @@
+using Microsoft.EntityFrameworkCore;
+using TaskManagement.Business.Services;
+using TaskManagement.Data.Contracts.RepositoryInterfaces;
+using TaskManagement.Data.Contracts.ServicesInterfaces;
+using TaskManagement.Infrastructure.Data;
+using TaskManagement.Infrastructure.Repositories;
+
 namespace TaskManagementSystem
 {
     public class Program
@@ -9,28 +16,46 @@ namespace TaskManagementSystem
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
+			builder.Services.AddDbContext<TaskDBContext>(options =>
+	        options.UseSqlServer(
+	     	builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+            builder.Services.AddAuthentication("CookieAuth")
+            .AddCookie("CookieAuth", options =>
+            {
+            options.LoginPath = "/User/Login";
+            options.AccessDeniedPath = "/User/Login";
+            options.Cookie.Name = "TaskManagementCookie";
+            });
+
+			builder.Services.AddScoped<ITaskService, TaskService>();
+			builder.Services.AddScoped<IUserService, UserService>();
+			builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+			builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+
+			var app = builder.Build();
+
+			app.UseStaticFiles();
+
+			if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
+         
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+			app.MapControllerRoute(
+	        name: "default",
+	        pattern: "{controller=User}/{action=Login}/{id?}");
 
-            app.Run();
+			app.Run();
         }
     }
 }
