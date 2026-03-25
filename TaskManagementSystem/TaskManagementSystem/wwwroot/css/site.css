@@ -72,15 +72,15 @@ main.flex-fill {
     }
 
     25% {
-        transform: translateX(-3px);
+        transform: translateX(-1px);
     }
 
     50% {
-        transform: translateX(3px);
+        transform: translateX(0px);
     }
 
     75% {
-        transform: translateX(-3px);
+        transform: translateX(-1px);
     }
 
     100% {
