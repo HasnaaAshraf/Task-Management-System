@@ -75,14 +75,12 @@ function checkTaskDeadlines() {
 
         const taskId = row.dataset.taskId;
 
-        // reminder قبل الديدلاين
         if (minutesLeft > 0 && minutesLeft < 5) {
 
             showToast("⏰ Hurry! This task is almost due!", "warning");
 
         }
 
-        // لو الوقت انتهى
         if (minutesLeft <= 0 && !row.dataset.alertShown) {
 
             row.dataset.alertShown = "true";
